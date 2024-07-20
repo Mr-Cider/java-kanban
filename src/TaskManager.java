@@ -34,7 +34,7 @@ public class TaskManager implements ITaskManager {
     @Override
     public ArrayList<Epic> getEpics() {
         if (!epics.isEmpty()) {
-            ArrayList<Epic> epicArrayList = new ArrayList<>(epics.values());
+            ArrayList<Epic>  epicArrayList = new ArrayList<>(epics.values());
             return epicArrayList;
         }
         System.out.println("Список эпиков пустой.");
@@ -43,14 +43,18 @@ public class TaskManager implements ITaskManager {
 
     @Override
     public ArrayList<Subtask> getEpicSubtasks(int epicId) {
-//        if (epics.get(epicId) == null) {
-//            System.out.println("Эпика с таким id не существует.");
-//            return null;
-//        }
+        if (epics.get(epicId) == null) {
+            System.out.println("Эпика с таким id не существует.");
+            return null;
+        }
+        if (epics.get(epicId).getSubtaskIds().isEmpty()) {
+            System.out.println("В эпике нет сабтасков.");
+            return null;
+        }
         ArrayList<Subtask> subtaskArrayList = new ArrayList<>(); // ПРОВЕРИТ// Ь
         ArrayList<Integer> subtaskIds = epics.get(epicId).getSubtaskIds();
         for (Integer id : subtaskIds) {
-            subtaskArrayList.add(getSubtask(id));
+            subtaskArrayList.add(subtasks.get(id));
         }
         return subtaskArrayList;
 }
@@ -106,7 +110,7 @@ public class TaskManager implements ITaskManager {
             }
             subtask.setId(id);
             epic.addSubtaskId(subtask.getId());
-            subtasks.put(subtask.epicId, subtask);
+            subtasks.put(id, subtask);
             return id;
         }
         System.out.println("Передан объект другого типа. Сабтаск не добавлен.");
@@ -146,8 +150,9 @@ public class TaskManager implements ITaskManager {
         }
         subtasks.put(subtask.id, subtask);
         System.out.println("Сабтаск обновлён");
-
     }
+
+
 
     @Override
     public void deleteTask(int id) {
@@ -162,6 +167,10 @@ public class TaskManager implements ITaskManager {
     public void deleteEpic(int id) {
         if (!(epics.containsKey(id))) {
             System.out.println("Нет эпика с таким id: " + id);
+        }
+        ArrayList<Integer> subtaskIds = epics.get(id).getSubtaskIds();
+        for (Integer subtaskId : subtaskIds) {
+            subtasks.remove(subtaskId);
         }
         epics.remove(id);
         System.out.println("Эпик удален");

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public interface ITaskManager {
@@ -22,17 +23,21 @@ public interface ITaskManager {
 
     Integer addNewSubtask(Subtask subtask);
 
-//    static void updateEpicStatus(Epic epic) {
-//        Set<String> = //get all status
-//        if(...) {
-//            epic.setStatus("//");
-//            return;
-//        }
-//        if (...) {
-//            epic.setStatus("//");
-//            updateEpicStatus(epic);
-//        }
-//    }
+    static void updateEpicStatus(Epic epic) {
+        Set<TaskStatus> setStatus = new HashSet<>(); //get all status
+        setStatus.add(TaskStatus.NEW);
+        setStatus.add(TaskStatus.IN_PROGRESS);
+        setStatus.add(TaskStatus.DONE);
+
+        if(epic.subtaskIds.isEmpty()) {
+            epic.setStatus("NEW");
+            return;
+        }
+        if (...) {
+            epic.setStatus("//");
+            updateEpicStatus(epic);
+        }
+    }
 
     void updateTask(Task task);
 
