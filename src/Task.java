@@ -19,6 +19,7 @@ public class Task {
         this.status = TaskStatus.valueOf(status);
     }
 
+
     public boolean isEpic() {
         return false;
     }
@@ -75,11 +76,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return "\n" + name + ", " +
+        return " " + name + ", " +
                 description + ", " +
                 "ID " + id + ", " +
-                status;
+                status + " ";
     }
+
 }
 
 

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TaskManager implements ITaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
@@ -93,6 +95,7 @@ public class TaskManager implements ITaskManager {
             final int id = ++generatorId;
             epic.setId(id);
             epics.put(id, epic);
+            updateEpicStatus(epic);
             return id;
         }
         System.out.println("Передан объект другого типа. Эпик не добавлен");
@@ -111,6 +114,7 @@ public class TaskManager implements ITaskManager {
             subtask.setId(id);
             epic.addSubtaskId(subtask.getId());
             subtasks.put(id, subtask);
+            updateEpicStatus(epic);
             return id;
         }
         System.out.println("Передан объект другого типа. Сабтаск не добавлен.");
@@ -127,7 +131,7 @@ public class TaskManager implements ITaskManager {
             tasks.put(task.id, task);
             System.out.println("Задача обновлена.");
         } else {
-            System.out.println("Задача не обновлена, передан объект другого типа.");
+            System.out.println("Таск не обновлен, передан объект другого типа.");
         }
 
     }
@@ -139,16 +143,19 @@ public class TaskManager implements ITaskManager {
             return;
         }
         epics.put(epic.id, epic);
+        updateEpicStatus(epic);
         System.out.println("Эпик обновлён.");
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        System.out.println("Для обновления сабтаска нужно передать существующий id сабтаска. Сабтаск не обновлён.");
-        if (!(subtasks.containsKey(subtask.id))) {
+        Epic epic = getEpic(subtask.getEpicId());
+        if (!(subtasks.containsKey(subtask.getId()))) {
+            System.out.println("Для обновления сабтаска нужно передать существующий id сабтаска. Сабтаск не обновлён.");
             return;
         }
         subtasks.put(subtask.id, subtask);
+        updateEpicStatus(epic);
         System.out.println("Сабтаск обновлён");
     }
 
@@ -157,10 +164,10 @@ public class TaskManager implements ITaskManager {
     @Override
     public void deleteTask(int id) {
         if (!(tasks.containsKey(id))) {
-            System.out.println("Нет задачи с таким id: " + id);
+            System.out.println("Нет таска с таким id: " + id);
         }
         tasks.remove(id);
-        System.out.println("Задача удалена");
+        System.out.println("Таск c ID " + id + " удален.");
     }
 
     @Override
@@ -173,35 +180,71 @@ public class TaskManager implements ITaskManager {
             subtasks.remove(subtaskId);
         }
         epics.remove(id);
-        System.out.println("Эпик удален");
+        System.out.println("Эпик c id + " + id + " и связанные с ним сабтаски удалены.");
     }
 
     @Override
     public void deleteSubtask(int id) {
         if (!(subtasks.containsKey(id))) {
-            System.out.println("Нет подзадачи с таким id: " + id);
+            System.out.println("Нет сабтаска с таким id: " + id);
         }
+        Subtask subtask = getSubtask(id);
+        Epic epic = getEpic(subtask.getEpicId());
+        epic.subtaskIds.remove(id);
         subtasks.remove(id);
-        System.out.println("Подзадача удалена");
+        updateEpicStatus(epic);
+        System.out.println("Сабтаск с id " + id + " удален.");
     }
 
     @Override
     public void deleteTasks() {
         tasks.clear();
-        System.out.println("Список задач очищен.");
+        System.out.println("Список тасков очищен.");
     }
 
     @Override
     public void deleteSubtasks() {
         subtasks.clear();
-        System.out.println("Список подзадач очищен.");
+        for (Integer id : epics.keySet()) {
+            Epic epic = getEpic(id);
+            updateEpicStatus(epic);
+            if (!(epic.getSubtaskIds().isEmpty())) {
+                epic.cleanSubtaskIds();
+            }
+        }
+        System.out.println("Список сабтасков очищен.");
     }
 
     @Override
     public void deleteEpics() {
         subtasks.clear();
         epics.clear();
-        System.out.println("Список эпиков и связанных с ними подзадач удален.");
+        System.out.println("Список эпиков и связанных с ними сабтасков удален.");
+    }
+
+    public void updateEpicStatus(Epic epic) {
+        Set<TaskStatus> setStatus = new HashSet<>(); //get all status
+        if (getEpicSubtasks(epic.getId()) != null) {
+            for (Subtask subtask : getEpicSubtasks(epic.getId())) {
+                setStatus.add(subtask.getStatus());
+            }
+            if (setStatus.isEmpty()) {
+                epic.setStatus("NEW");
+                return;
+            }
+
+            if (setStatus.size() == 1 && setStatus.contains(TaskStatus.NEW)) {
+                epic.setStatus("NEW");
+                return;
+            }
+
+            if (setStatus.contains(TaskStatus.DONE) && setStatus.size() == 1) {
+                epic.setStatus("DONE");
+                return;
+            }
+            epic.setStatus("IN_PROGRESS");
+        }
+        System.out.println("В эпике нет сабтасков");
     }
 }
 

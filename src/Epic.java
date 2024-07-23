@@ -3,13 +3,17 @@ import java.util.ArrayList;
 public class Epic extends Task {
     protected ArrayList<Integer> subtaskIds = new ArrayList<>();
 
-    public Epic(int id, String name, String description, String status) {
-        super(name, description, id, status);
+    public Epic(String name, String description) {
+        super(name, description, setEpicStatus());
     }
 
-    public Epic(String name, String description, String status) {
-        super(name, description, status);
+    public Epic(String name, String description, int id) {
+        super(name, description, id, setEpicStatus());
     }
+
+    private static String setEpicStatus() {
+        return "NEW";
+}
 
     @Override
     public boolean isEpic() {
@@ -32,7 +36,5 @@ public class Epic extends Task {
     public void cleanSubtaskIds() {
         subtaskIds.clear();
     }
-
-
 }
 
