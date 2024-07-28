@@ -1,19 +1,17 @@
+package allTasks;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    protected ArrayList<Integer> subtaskIds = new ArrayList<>();
+    private ArrayList<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(String name, String description) {
-        super(name, description, setEpicStatus());
+        super(name, description, "NEW");
     }
 
     public Epic(String name, String description, int id) {
-        super(name, description, id, setEpicStatus());
+        super(name, description, id, "NEW");
     }
-
-    private static String setEpicStatus() {
-        return "NEW";
-}
 
     @Override
     public boolean isEpic() {
@@ -35,6 +33,10 @@ public class Epic extends Task {
 
     public void cleanSubtaskIds() {
         subtaskIds.clear();
+    }
+
+    public void deleteSubtaskId (int id) {
+        subtaskIds.remove(id);
     }
 }
 

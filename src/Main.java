@@ -1,3 +1,8 @@
+import allTasks.Epic;
+import allTasks.Subtask;
+import allTasks.Task;
+import manager.TaskManager;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -62,7 +67,16 @@ public class Main {
         taskManager.deleteEpic(3);
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubtasks());
-
+        Epic epic1 = new Epic("Эпик №2", "Дополнено описание", epic2.getId());
+        taskManager.updateEpic(epic1);
+        System.out.println(taskManager.getEpics());
+        Subtask subtask4 = new Subtask("Второй сабтаск к эпику № " + epic1.getId(), "Описание к нему", "IN_PROGRESS", epic1.getId());
+        taskManager.addNewSubtask(subtask4);
+        System.out.println(taskManager.getEpics());
+        System.out.println(taskManager.getEpicSubtasks(epic1.getId()));
+        taskManager.deleteSubtasks();
+        System.out.println(taskManager.getEpicSubtasks(epic1.getId()));
+        System.out.println(taskManager.getEpics());
     }
 
 

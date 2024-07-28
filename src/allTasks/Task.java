@@ -1,3 +1,7 @@
+package allTasks;
+
+import manager.TaskStatus;
+
 import java.util.Objects;
 
 public class Task {

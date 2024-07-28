@@ -1,3 +1,9 @@
+package manager;
+
+import allTasks.Epic;
+import allTasks.Subtask;
+import allTasks.Task;
+
 import java.util.ArrayList;
 
 
@@ -22,7 +28,6 @@ public interface ITaskManager {
 
     Integer addNewSubtask(Subtask subtask);
 
-    void updateEpicStatus(Epic epic);
 
     void updateTask(Task task);
 

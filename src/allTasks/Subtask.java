@@ -1,7 +1,9 @@
+package allTasks;
+
 import java.util.Objects;
 
 public class Subtask extends Task {
-    protected int epicId;
+    private int epicId;
 
 
     public Subtask(String name, String description, int id, String status, int epicId) {
