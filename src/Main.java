@@ -72,11 +72,13 @@ public class Main {
         System.out.println(taskManager.getEpics());
         Subtask subtask4 = new Subtask("Второй сабтаск к эпику № " + epic1.getId(), "Описание к нему", "IN_PROGRESS", epic1.getId());
         taskManager.addNewSubtask(subtask4);
+        System.out.println("-".repeat(50));
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getEpicSubtasks(epic1.getId()));
-        taskManager.deleteSubtasks();
-        System.out.println(taskManager.getEpicSubtasks(epic1.getId()));
-        System.out.println(taskManager.getEpics());
+        taskManager.deleteSubtask(7);
+//        taskManager.deleteSubtasks();
+//        System.out.println(taskManager.getEpicSubtasks(epic1.getId()));
+//        System.out.println(taskManager.getEpics());
     }
 
 

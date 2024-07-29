@@ -22,7 +22,7 @@ public class TaskManager implements ITaskManager {
             ArrayList<Task> taskArrayList = new ArrayList<>(tasks.values());
             return taskArrayList;
         }
-        return null;
+        return new ArrayList<>(Collections.emptyList());
     }
 
     @Override
@@ -41,16 +41,16 @@ public class TaskManager implements ITaskManager {
             ArrayList<Epic>  epicArrayList = new ArrayList<>(epics.values());
             return epicArrayList;
         }
-        return null;
+        return new ArrayList<>(Collections.emptyList());
     }
 
     @Override
     public ArrayList<Subtask> getEpicSubtasks(int epicId) {
         if (epics.get(epicId) == null) {
-            return null;
+            return new ArrayList<>(Collections.emptyList());
         }
         if (epics.get(epicId).getSubtaskIds().isEmpty()) {
-            return null;
+            return new ArrayList<>(Collections.emptyList());
         }
         ArrayList<Subtask> subtaskArrayList = new ArrayList<>(); // ПРОВЕРИТ// Ь
         ArrayList<Integer> subtaskIds = epics.get(epicId).getSubtaskIds();
