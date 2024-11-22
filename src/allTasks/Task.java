@@ -23,6 +23,12 @@ public class Task {
         this.status = TaskStatus.valueOf(status);
     }
 
+    public Task(Task copy) {
+        this.name = copy.name;
+        this.description = copy.description;
+        this.id = copy.id;
+        this.status = copy.status;
+    }
 
     public boolean isEpic() {
         return false;
@@ -64,18 +70,17 @@ public class Task {
         this.status = TaskStatus.valueOf(status);
     }
 
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
+        return id == task.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, id, status);
+        return Objects.hashCode(id);
     }
 
     @Override

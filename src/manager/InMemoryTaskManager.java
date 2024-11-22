@@ -6,14 +6,21 @@ import allTasks.Task;
 import java.util.Collections;
 import java.util.*;
 
-public class TaskManager implements ITaskManager {
+public class InMemoryTaskManager implements ITaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
 
     private final HashMap<Integer, Epic> epics = new HashMap<>();
 
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
+    private final IHistoryManager historyManager;
+
     private int newId = 0;
+
+
+    public InMemoryTaskManager(IHistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
 
 
     @Override
@@ -38,7 +45,7 @@ public class TaskManager implements ITaskManager {
     @Override
     public ArrayList<Epic> getEpics() {
         if (!epics.isEmpty()) {
-            ArrayList<Epic>  epicArrayList = new ArrayList<>(epics.values());
+            ArrayList<Epic> epicArrayList = new ArrayList<>(epics.values());
             return epicArrayList;
         }
         return new ArrayList<>(Collections.emptyList());
@@ -58,21 +65,25 @@ public class TaskManager implements ITaskManager {
             subtaskArrayList.add(subtasks.get(id));
         }
         return subtaskArrayList;
-}
+    }
 
 
     @Override
     public Task getTask(int id) {
+        historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
+
     @Override
     public Subtask getSubtask(int id) {
+        historyManager.add(subtasks.get(id));
         return subtasks.get(id);
     }
 
     @Override
     public Epic getEpic(int id) {
+        historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
@@ -99,10 +110,10 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public Integer addNewSubtask(Subtask subtask) {
+    public Integer addNewSubtask(Subtask subtask) { 
         if (subtask.isSubtask()) {
             final int id = ++newId;
-            Epic epic = getEpic(subtask.getEpicId());
+            Epic epic = getEpicNotHistory(subtask.getEpicId());
             if (epic == null) {
                 return -1;
             }
@@ -125,14 +136,15 @@ public class TaskManager implements ITaskManager {
         }
     }
 
+
     @Override
     public void updateEpic(Epic epic) {
         if (!(epics.containsKey(epic.getId()))) {
             return;
         }
-        epics.get(epic.getId()).setName(epic.getName());
-        epics.get(epic.getId()).setDescription(epic.getDescription());
+        epics.put(epic.getId(), epic);
     }
+
 
     @Override
     public void updateSubtask(Subtask subtask) {
@@ -143,7 +155,6 @@ public class TaskManager implements ITaskManager {
         subtasks.put(subtask.getId(), subtask);
         updateEpicStatus(epic);
     }
-
 
 
     @Override
@@ -221,6 +232,10 @@ public class TaskManager implements ITaskManager {
             }
             epic.setStatus("IN_PROGRESS");
         }
+    }
+
+    private Epic getEpicNotHistory(int id) {
+        return epics.get(id);
     }
 }
 

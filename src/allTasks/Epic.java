@@ -13,6 +13,10 @@ public class Epic extends Task {
         super(name, description, id, "NEW");
     }
 
+    public Epic(Epic copy) {
+        super(copy);
+    }
+
     @Override
     public boolean isEpic() {
         return true;
