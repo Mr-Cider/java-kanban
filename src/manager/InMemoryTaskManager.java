@@ -7,11 +7,11 @@ import java.util.Collections;
 import java.util.*;
 
 public class InMemoryTaskManager implements ITaskManager {
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
 
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
 
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
 
     private final IHistoryManager historyManager;
 
@@ -22,6 +22,9 @@ public class InMemoryTaskManager implements ITaskManager {
         this.historyManager = historyManager;
     }
 
+    public IHistoryManager getHistoryManager() {
+        return historyManager;
+    }
 
     @Override
     public ArrayList<Task> getTasks() {
@@ -209,6 +212,8 @@ public class InMemoryTaskManager implements ITaskManager {
         subtasks.clear();
         epics.clear();
     }
+
+
 
     private void updateEpicStatus(Epic epic) {
         Set<TaskStatus> setStatus = new HashSet<>(); //get all status

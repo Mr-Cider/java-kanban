@@ -9,5 +9,6 @@ public class Managers {
     public static IHistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
+
 }
 

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 
 public interface ITaskManager {
+
+    IHistoryManager getHistoryManager();
+
     ArrayList<Task> getTasks();
 
     ArrayList<Subtask> getSubtasks();

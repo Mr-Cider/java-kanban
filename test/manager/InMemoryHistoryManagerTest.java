@@ -5,8 +5,9 @@ import allTasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.LinkedList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static serviceTest.TestMethods.*;
 
 class InMemoryHistoryManagerTest {
@@ -28,9 +29,16 @@ class InMemoryHistoryManagerTest {
         Task task2 = new Task("Обновленный таск", "Описание обновленного таска", 1, "IN_PROGRESS");
         taskManager.updateTask(task2);
         taskManager.getTask(1);
-        List<Task> history = historyManager.getHistory();
+        LinkedList<Task> history = historyManager.getHistory();
         assertEqualsTask(taskForCheck, history.get(0), "Таски не совпадают");
         assertEqualsTask(task2, history.get(1), "Таски не совпадают");
-
     }
+
+    @Test
+    void shouldTaskIsNull() {
+     taskManager.getTask(0);
+     LinkedList<Task> history = historyManager.getHistory();
+        assertEquals(0, history.size(), "Пустой таск добавлен");
+    }
+
 }
