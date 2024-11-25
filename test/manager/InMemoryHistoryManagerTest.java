@@ -32,6 +32,7 @@ class InMemoryHistoryManagerTest {
         LinkedList<Task> history = historyManager.getHistory();
         assertEqualsTask(taskForCheck, history.get(0), "Таски не совпадают");
         assertEqualsTask(task2, history.get(1), "Таски не совпадают");
+        System.out.println(taskManager.getHistory());
     }
 
     @Test

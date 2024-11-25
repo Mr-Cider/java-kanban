@@ -19,11 +19,11 @@ public class InMemoryTaskManager implements ITaskManager {
 
 
     public InMemoryTaskManager(IHistoryManager historyManager) {
-        this.historyManager = historyManager;
+            this.historyManager = historyManager;
     }
 
-    public IHistoryManager getHistoryManager() {
-        return historyManager;
+    public LinkedList<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override

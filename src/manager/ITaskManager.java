@@ -5,11 +5,12 @@ import allTasks.Subtask;
 import allTasks.Task;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public interface ITaskManager {
 
-    IHistoryManager getHistoryManager();
+    LinkedList<Task> getHistory();
 
     ArrayList<Task> getTasks();
 
