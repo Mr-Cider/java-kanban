@@ -22,8 +22,8 @@ public class InMemoryTaskManager implements ITaskManager {
             this.historyManager = historyManager;
     }
 
-    public LinkedList<Task> getHistory() {
-        return historyManager.getHistory();
+    public List<Task> getHistory() {
+        return historyManager.getHistory(); //
     }
 
     @Override
