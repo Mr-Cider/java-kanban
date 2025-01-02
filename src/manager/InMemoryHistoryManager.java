@@ -4,14 +4,10 @@ import alltasks.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements IHistoryManager {
-    //    private final List<Task> history = new LinkedList<>();
-//      private final Map<Integer, Node<Task>> map = new HashMap<>();
-    customLinkedHashMap<Task> history = new customLinkedHashMap<>();
 
+    CustomLinkedHashMap<Task> history = new CustomLinkedHashMap<>();
 
-//    private static final int MAX_HISTORY_SIZE = 9;
-
-    public class customLinkedHashMap<T> {
+    public class CustomLinkedHashMap<T> {
         private Node<T> head;
         private Node<T> tail;
         private int size = 0;
