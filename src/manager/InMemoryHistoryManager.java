@@ -31,7 +31,7 @@ public class InMemoryHistoryManager implements IHistoryManager {
         }
 
         public void removeNode(Node<T> node) {
-            if(node == null) {
+            if (node == null) {
                 return;
             }
             if (node == head) {
@@ -52,7 +52,7 @@ public class InMemoryHistoryManager implements IHistoryManager {
     @Override
     public void add(Task task) {
         if (task != null) history.add(task.getId(), task);
-        }
+    }
 
     @Override
     public void remove(int id) {
@@ -68,7 +68,7 @@ public class InMemoryHistoryManager implements IHistoryManager {
             historyList.add(node.data);
             node = node.next;
         }
-            return historyList;
+        return historyList;
     }
 }
 

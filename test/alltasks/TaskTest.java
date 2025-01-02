@@ -9,26 +9,26 @@ import static manager.TaskStatus.NEW;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
-Task task;
+    Task task;
 
 
-@BeforeEach
-void beforeEach() {
-    task = new Task("1 задача", "Описание 1 задачи", 1, "NEW");
-}
+    @BeforeEach
+    void beforeEach() {
+        task = new Task("1 задача", "Описание 1 задачи", 1, "NEW");
+    }
 
-@Test
-void shouldIsNotEpic() {
-    boolean actual = task.isEpic();
-    assertEquals(false, actual, "Объект является эпиком");
+    @Test
+    void shouldIsNotEpic() {
+        boolean actual = task.isEpic();
+        assertEquals(false, actual, "Объект является эпиком");
 
-}
+    }
 
-@Test
-void shouldIsNotSubtask() {
-    boolean actual = task.isSubtask();
-    assertEquals(false, actual, "Объект является сабтаском");
-}
+    @Test
+    void shouldIsNotSubtask() {
+        boolean actual = task.isSubtask();
+        assertEquals(false, actual, "Объект является сабтаском");
+    }
 
     @Test
     void shouldGetName() {
@@ -81,12 +81,4 @@ void shouldIsNotSubtask() {
         Task task2 = new Task("Другая задача", "Описание другой задачи", 1, "DONE");
         assertEquals(task, task2, "Таски не равны");
     }
-
-
-
-
-
-
-
-
 }

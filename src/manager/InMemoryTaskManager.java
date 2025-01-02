@@ -19,7 +19,7 @@ public class InMemoryTaskManager implements ITaskManager {
 
 
     public InMemoryTaskManager(IHistoryManager historyManager) {
-            this.historyManager = historyManager;
+        this.historyManager = historyManager;
     }
 
     public List<Task> getHistory() {
@@ -113,7 +113,7 @@ public class InMemoryTaskManager implements ITaskManager {
     }
 
     @Override
-    public Integer addNewSubtask(Subtask subtask) { 
+    public Integer addNewSubtask(Subtask subtask) {
         if (subtask.isSubtask()) {
             final int id = ++newId;
             Epic epic = getEpicNotHistory(subtask.getEpicId());
@@ -212,7 +212,6 @@ public class InMemoryTaskManager implements ITaskManager {
         subtasks.clear();
         epics.clear();
     }
-
 
 
     private void updateEpicStatus(Epic epic) {

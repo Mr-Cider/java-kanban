@@ -36,8 +36,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void shouldTaskIsNull() {
-     taskManager.getTask(0);
-     List<Task> history = historyManager.getHistory();
+        taskManager.getTask(0);
+        List<Task> history = historyManager.getHistory();
         assertEquals(0, history.size(), "Пустой таск добавлен");
     }
 
@@ -75,6 +75,6 @@ class InMemoryHistoryManagerTest {
             Task task = new Task(taskNum, taskNum, i + 1, "NEW");
             historyManager.add(task);
         }
-        assertEquals(20, historyManager.getHistory().size(),"Размер истории не совпадает");
+        assertEquals(20, historyManager.getHistory().size(), "Размер истории не совпадает");
     }
 }
