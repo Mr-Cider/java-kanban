@@ -1,16 +1,16 @@
 package manager;
 
-import allTasks.Epic;
-import allTasks.Subtask;
-import allTasks.Task;
+import alltasks.Epic;
+import alltasks.Subtask;
+import alltasks.Task;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 
 public interface ITaskManager {
 
-    LinkedList<Task> getHistory();
+    List<Task> getHistory();
 
     ArrayList<Task> getTasks();
 
@@ -50,8 +50,4 @@ public interface ITaskManager {
     void deleteSubtasks();
 
     void deleteEpics();
-
-
-
-
 }

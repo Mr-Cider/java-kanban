@@ -1,4 +1,4 @@
-package allTasks;
+package alltasks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +33,4 @@ class SubtaskTest {
         Subtask subtask2 = new Subtask("Другой сабтаск", "Описание к нему", 2, "DONE", 1);
         assertEquals(subtask, subtask2, "Сабтаски не равны");
     }
-
-
 }
