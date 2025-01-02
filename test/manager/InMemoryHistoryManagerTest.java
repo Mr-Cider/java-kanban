@@ -1,14 +1,14 @@
 package manager;
 
 
-import allTasks.Task;
+import alltasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static serviceTest.TestMethods.*;
+import static servicetest.TestMethods.*;
 
 class InMemoryHistoryManagerTest {
     InMemoryHistoryManager historyManager;

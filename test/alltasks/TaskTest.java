@@ -1,7 +1,6 @@
-package allTasks;
+package alltasks;
 
 import manager.TaskStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package manager;
 
-import allTasks.Epic;
-import allTasks.Subtask;
-import allTasks.Task;
+import alltasks.Epic;
+import alltasks.Subtask;
+import alltasks.Task;
 import java.util.Collections;
 import java.util.*;
 
