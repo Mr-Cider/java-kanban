@@ -41,11 +41,6 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldGetTaskIfNull() {
-        System.out.println(taskManager.getTask(1));
-    }
-
-    @Test
     void shouldAddNewEpicGetEpics() {
         Epic epic = new Epic("Первый эпик", "Описание первого эпика", 1);
         Epic epic2 = new Epic("Второй эпик", "Описание второго эпика", 2);

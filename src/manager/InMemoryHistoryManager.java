@@ -5,16 +5,15 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements IHistoryManager {
 
-    CustomLinkedHashMap<Task> history = new CustomLinkedHashMap<>();
+    private final CustomLinkedHashMap<Task> history = new CustomLinkedHashMap<>();
 
-    public class CustomLinkedHashMap<T> {
+    private static class CustomLinkedHashMap<T> {
         private Node<T> head;
         private Node<T> tail;
-        private int size = 0;
         private final Map<Integer, Node<T>> map = new HashMap<>();
 
-        public void add(Integer key, T element) {
-            final Node<T> newNode = new Node<>(tail, element, null);
+        private void add(Integer key, T element) {
+            final Node<T> newNode = new Node<>(tail, element, null, key);
             if (map.containsKey(key)) {
                 Node<T> removingNode = map.get(key);
                 removeNode(removingNode);
@@ -23,7 +22,6 @@ public class InMemoryHistoryManager implements IHistoryManager {
             tail = newNode;
             if (head == null) head = newNode;
             map.put(key, newNode);
-            size++;
         }
 
         public void removeNode(Node<T> node) {
@@ -40,8 +38,7 @@ public class InMemoryHistoryManager implements IHistoryManager {
             } else {
                 node.next.prev = node.prev;
             }
-            size--;
-            map.values().remove(node);
+            map.remove(node.key);
         }
     }
 
@@ -53,7 +50,6 @@ public class InMemoryHistoryManager implements IHistoryManager {
     @Override
     public void remove(int id) {
         history.removeNode(history.map.get(id));
-        history.map.remove(id);
     }
 
     @Override
