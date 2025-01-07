@@ -1,4 +1,4 @@
-package allTasks;
+package alltasks;
 
 import manager.TaskStatus;
 
@@ -90,7 +90,6 @@ public class Task {
                 "ID " + id + ", " +
                 status + " ";
     }
-
 }
 
 

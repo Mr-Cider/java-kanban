@@ -1,13 +1,15 @@
 package manager;
 
-import allTasks.Task;
+import alltasks.Task;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public interface IHistoryManager {
 
     void add(Task task);
 
-    LinkedList<Task> getHistory();
+    void remove(int id);
+
+    List<Task> getHistory();
 
 }

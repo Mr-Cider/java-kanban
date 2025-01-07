@@ -1,8 +1,8 @@
-package serviceTest;
+package servicetest;
 
-import allTasks.Epic;
-import allTasks.Subtask;
-import allTasks.Task;
+import alltasks.Epic;
+import alltasks.Subtask;
+import alltasks.Task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

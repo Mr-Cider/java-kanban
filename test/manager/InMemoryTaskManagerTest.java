@@ -1,8 +1,8 @@
 package manager;
 
-import allTasks.Epic;
-import allTasks.Subtask;
-import allTasks.Task;
+import alltasks.Epic;
+import alltasks.Subtask;
+import alltasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static manager.TaskStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static serviceTest.TestMethods.*;
+import static servicetest.TestMethods.*;
 
 
 class InMemoryTaskManagerTest {
@@ -38,11 +38,6 @@ class InMemoryTaskManagerTest {
         Task task = new Task("1 задача", "Описание 1 задачи", 1, "NEW");
         taskManager.addNewTask(task);
         assertEqualsTask(task, taskManager.getTask(1), "Задачи не совпадают");
-    }
-
-    @Test
-    void shouldGetTaskIfNull() {
-        System.out.println(taskManager.getTask(1));
     }
 
     @Test
