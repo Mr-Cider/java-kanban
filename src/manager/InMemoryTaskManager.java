@@ -29,8 +29,7 @@ public class InMemoryTaskManager implements ITaskManager {
     @Override
     public ArrayList<Task> getTasks() {
         if (!tasks.isEmpty()) {
-            ArrayList<Task> taskArrayList = new ArrayList<>(tasks.values());
-            return taskArrayList;
+            return new ArrayList<>(tasks.values());
         }
         return new ArrayList<>();
     }
@@ -38,8 +37,7 @@ public class InMemoryTaskManager implements ITaskManager {
     @Override
     public ArrayList<Subtask> getSubtasks() {
         if (!subtasks.isEmpty()) {
-            ArrayList<Subtask> subtaskArrayList = new ArrayList<>(subtasks.values());
-            return subtaskArrayList;
+            return new ArrayList<>(subtasks.values());
         }
         return new ArrayList<>(Collections.emptyList());
     }
@@ -48,8 +46,7 @@ public class InMemoryTaskManager implements ITaskManager {
     @Override
     public ArrayList<Epic> getEpics() {
         if (!epics.isEmpty()) {
-            ArrayList<Epic> epicArrayList = new ArrayList<>(epics.values());
-            return epicArrayList;
+            return new ArrayList<>(epics.values());
         }
         return new ArrayList<>(Collections.emptyList());
     }
@@ -62,7 +59,7 @@ public class InMemoryTaskManager implements ITaskManager {
         if (epics.get(epicId).getSubtaskIds().isEmpty()) {
             return new ArrayList<>(Collections.emptyList());
         }
-        ArrayList<Subtask> subtaskArrayList = new ArrayList<>(); // ПРОВЕРИТ// Ь
+        ArrayList<Subtask> subtaskArrayList = new ArrayList<>();
         ArrayList<Integer> subtaskIds = epics.get(epicId).getSubtaskIds();
         for (Integer id : subtaskIds) {
             subtaskArrayList.add(subtasks.get(id));
@@ -113,11 +110,12 @@ public class InMemoryTaskManager implements ITaskManager {
     }
 
     @Override
-    public Integer addNewSubtask(Subtask subtask) {
+    public int addNewSubtask(Subtask subtask) {
         if (subtask.isSubtask()) {
             final int id = ++newId;
             Epic epic = getEpicNotHistory(subtask.getEpicId());
             if (epic == null) {
+                System.out.println("Сабтаск не добавлен, эпик null");
                 return -1;
             }
             subtask.setId(id);
@@ -126,6 +124,7 @@ public class InMemoryTaskManager implements ITaskManager {
             updateEpicStatus(epic);
             return id;
         }
+        System.out.println("Сабтаск не добавлен, объект не сабтаск");
         return -1;
     }
 
@@ -218,12 +217,12 @@ public class InMemoryTaskManager implements ITaskManager {
 
     @Override
     public void deleteEpics() {
-            for (Integer key : epics.keySet()) {
-                historyManager.remove(key);
-            }
-            for (Integer key : subtasks.keySet()) {
-                historyManager.remove(key);
-            }
+        for (Integer key : epics.keySet()) {
+            historyManager.remove(key);
+        }
+        for (Integer key : subtasks.keySet()) {
+            historyManager.remove(key);
+        }
         subtasks.clear();
         epics.clear();
     }
