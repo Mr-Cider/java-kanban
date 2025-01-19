@@ -1,6 +1,7 @@
 package alltasks;
 
 import manager.TaskStatus;
+import manager.TypeOfTask;
 
 import java.util.Objects;
 
@@ -9,18 +10,21 @@ public class Task {
     protected String description;
     protected int id;
     protected TaskStatus status;
+    protected TypeOfTask typeOfTask;
 
     public Task(String name, String description, int id, String status) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = TaskStatus.valueOf(status);
+        this.typeOfTask = TypeOfTask.TASK;
     }
 
     public Task(String name, String description, String status) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.valueOf(status);
+        this.typeOfTask = TypeOfTask.TASK;
     }
 
     public Task(Task copy) {
@@ -28,6 +32,7 @@ public class Task {
         this.description = copy.description;
         this.id = copy.id;
         this.status = copy.status;
+        this.typeOfTask = TypeOfTask.EPIC;
     }
 
     public boolean isEpic() {
@@ -68,6 +73,10 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = TaskStatus.valueOf(status);
+    }
+
+    public TypeOfTask getTypeOfTask() {
+        return typeOfTask;
     }
 
     @Override

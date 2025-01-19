@@ -1,5 +1,7 @@
 package alltasks;
 
+import manager.TypeOfTask;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -7,14 +9,17 @@ public class Epic extends Task {
 
     public Epic(String name, String description) {
         super(name, description, "NEW");
+        this.typeOfTask = TypeOfTask.EPIC;
     }
 
     public Epic(String name, String description, int id) {
         super(name, description, id, "NEW");
+        this.typeOfTask = TypeOfTask.EPIC;
     }
 
     public Epic(Epic copy) {
         super(copy);
+        this.typeOfTask = TypeOfTask.EPIC;
     }
 
     @Override

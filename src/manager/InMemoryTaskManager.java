@@ -115,6 +115,7 @@ public class InMemoryTaskManager implements ITaskManager {
             final int id = ++newId;
             Epic epic = getEpicNotHistory(subtask.getEpicId());
             if (epic == null) {
+                System.out.println("Сабтаск не добавлен, эпик null");
                 return -1;
             }
             subtask.setId(id);
@@ -123,6 +124,7 @@ public class InMemoryTaskManager implements ITaskManager {
             updateEpicStatus(epic);
             return id;
         }
+        System.out.println("Сабтаск не добавлен, объект не сабтаск");
         return -1;
     }
 
@@ -215,12 +217,12 @@ public class InMemoryTaskManager implements ITaskManager {
 
     @Override
     public void deleteEpics() {
-            for (Integer key : epics.keySet()) {
-                historyManager.remove(key);
-            }
-            for (Integer key : subtasks.keySet()) {
-                historyManager.remove(key);
-            }
+        for (Integer key : epics.keySet()) {
+            historyManager.remove(key);
+        }
+        for (Integer key : subtasks.keySet()) {
+            historyManager.remove(key);
+        }
         subtasks.clear();
         epics.clear();
     }
