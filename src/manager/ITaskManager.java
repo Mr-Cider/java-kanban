@@ -30,7 +30,7 @@ public interface ITaskManager {
 
     int addNewEpic(Epic epic);
 
-    int addNewSubtask(Subtask subtask);
+    Integer addNewSubtask(Subtask subtask);
 
 
     void updateTask(Task task);
