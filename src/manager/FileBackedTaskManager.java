@@ -37,52 +37,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    @Override
-    public List<Task> getHistory() {
-        return super.getHistory();
-    }
-
-    @Override
-    public ArrayList<Task> getTasks() {
-        return super.getTasks();
-    }
-
-    @Override
-    public ArrayList<Subtask> getSubtasks() {
-        return super.getSubtasks();
-    }
-
-    @Override
-    public ArrayList<Epic> getEpics() {
-        return super.getEpics();
-    }
-
     public List<Task> getAllTasks() {
         List<Task> allTasks = new ArrayList<>();
         allTasks.addAll(getTasks());
         allTasks.addAll(getEpics());
         allTasks.addAll(getSubtasks());
         return allTasks;
-    }
-
-    @Override
-    public ArrayList<Subtask> getEpicSubtasks(int epicId) {
-        return super.getEpicSubtasks(epicId);
-    }
-
-    @Override
-    public Task getTask(int id) {
-        return super.getTask(id);
-    }
-
-    @Override
-    public Subtask getSubtask(int id) {
-        return super.getSubtask(id);
-    }
-
-    @Override
-    public Epic getEpic(int id) {
-        return super.getEpic(id);
     }
 
     @Override
@@ -164,12 +124,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return file;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         if (file.length() == 0) {
-           return new FileBackedTaskManager(new InMemoryHistoryManager());
+           return new FileBackedTaskManager(Managers.getDefaultHistory());
         }
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(new InMemoryHistoryManager());
+            FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(Managers.getDefaultHistory());
             List<Task> allTasks = new ArrayList<>();
             bufferedReader.readLine();
             while (bufferedReader.ready()) {
@@ -177,9 +137,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             for (Task task : allTasks) {
                 switch (task.getTypeOfTask()) {
-                    case TASK -> fileBackedTaskManager.addNewTask(task);
-                    case EPIC -> fileBackedTaskManager.addNewEpic((Epic) task);
-                    case SUBTASK -> fileBackedTaskManager.addNewSubtask((Subtask) task);
+                    case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
+                    case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                    case SUBTASK -> fileBackedTaskManager.subtasks.put(task.getId(), (Subtask) task);
                 }
             }
             return fileBackedTaskManager;
