@@ -70,6 +70,7 @@ public class FileBackedTaskManagerTest {
         taskManager = FileBackedTaskManager.loadFromFile(file);
         List<Task> checkTasks = taskManager.getAllTasks();
         assertEquals(3, checkTasks.size(), "Количество задач не совпадает");
+        assertEquals(3, taskManager.newId, "ID не совпадает");
     }
 
     @Test

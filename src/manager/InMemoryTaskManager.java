@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements ITaskManager {
 
     private final IHistoryManager historyManager;
 
-    private int newId = 0;
+    protected int newId = 0;
 
 
     public InMemoryTaskManager(IHistoryManager historyManager) {
