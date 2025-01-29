@@ -34,7 +34,6 @@ class EpicTest {
         ArrayList<Integer> arr = epic.getSubtaskIds();
         int actual = arr.get(0);
         assertEquals(id, actual, "ID не добавлен");
-
     }
 
     @Test
@@ -70,6 +69,5 @@ class EpicTest {
         Subtask subtask2 = new Subtask("1 сабтаск", "Описание к нему", 2, "IN_PROGRESS", 1, 20, "12.11.2025 12:00");
         Subtask subtask3 = new Subtask("1 сабтаск", "Описание к нему", 2, "IN_PROGRESS", 1, 40, "12.11.2025 13:00");
         Subtask subtask4 = new Subtask("1 сабтаск", "Описание к нему", 2, "IN_PROGRESS", 1, 30, "12.11.2025 14:00");
-
     }
 }

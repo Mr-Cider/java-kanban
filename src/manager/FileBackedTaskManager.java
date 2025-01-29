@@ -155,7 +155,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
     private String taskToString(Task task) {
         String mainEpic;
         String startTime;

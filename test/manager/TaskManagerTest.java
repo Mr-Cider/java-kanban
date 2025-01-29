@@ -24,8 +24,6 @@ public abstract class TaskManagerTest<T extends ITaskManager> {
 
     abstract T createTaskManager();
 
-
-
     @Test
     void shouldGetTask() {
         Task task = new Task("1 задача", "Описание 1 задачи", 1, "NEW");

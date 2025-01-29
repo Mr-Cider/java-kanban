@@ -193,10 +193,7 @@ public class InMemoryTaskManager implements ITaskManager {
                 if (checkForIntersectingTasks(subtask)) addOrUpdateSortedTask(subtask);
             }
             updateEpicStatus(epic);
-
-
     }
-
 
     @Override
     public void deleteTask(int id) {

@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskTest {
     Task task;
 
-
     @BeforeEach
     void beforeEach() {
         task = new Task("1 задача", "Описание 1 задачи", 1, "NEW");

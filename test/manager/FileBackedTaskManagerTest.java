@@ -17,7 +17,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     FileBackedTaskManager taskManager;
     File file;
 
-
     @Override
     FileBackedTaskManager createTaskManager() throws ManagerSaveException {
         try {

@@ -47,6 +47,7 @@ public class Epic extends Task {
         return null;
     }
 }
+
     @Override
     public boolean isEpic() {
         return true;
@@ -85,6 +86,5 @@ public class Epic extends Task {
                 startTime + ", " +
                 endTime + "]\n";
     }
-
 }
 
