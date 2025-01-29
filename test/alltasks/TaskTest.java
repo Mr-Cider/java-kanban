@@ -81,4 +81,10 @@ class TaskTest {
         Task task2 = new Task("Другая задача", "Описание другой задачи", 1, "DONE");
         assertEquals(task, task2, "Таски не равны");
     }
+
+    @Test
+    void testForTest() {
+        Task task2 = new Task("Другая задача", "Описание другой задачи", 1, "DONE", 30, "12.11.2025 14:30");
+        System.out.println(task2.getEndTime());
+    }
 }

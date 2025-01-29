@@ -4,6 +4,7 @@ import alltasks.Epic;
 import alltasks.Subtask;
 import alltasks.Task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,4 +51,6 @@ public interface ITaskManager {
     void deleteSubtasks();
 
     void deleteEpics();
+
+    List<Task> getAllTasks();
 }

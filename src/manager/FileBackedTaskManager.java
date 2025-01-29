@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private final File file;
+    protected final File file;
 
     public FileBackedTaskManager(IHistoryManager historyManager) {
         super(historyManager);
@@ -28,7 +28,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void save() {
         List<Task> allTasks = getAllTasks();
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write("id,type,name,status,description,epic");
+            bufferedWriter.write("id,type,name,status,description,duration,startTime,endTime,epic");
             for (Task task : allTasks) {
                 bufferedWriter.write(taskToString(task));
             }
@@ -37,12 +37,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public List<Task> getAllTasks() {
-        List<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(getTasks());
-        allTasks.addAll(getEpics());
-        allTasks.addAll(getSubtasks());
-        return allTasks;
+    public File getFile() {
+        return file;
     }
 
     @Override
@@ -120,10 +116,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    public File getFile() {
-        return file;
-    }
-
     public static FileBackedTaskManager loadFromFile(File file) {
         if (file.length() == 0) {
            return new FileBackedTaskManager(Managers.getDefaultHistory());
@@ -166,14 +158,26 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String taskToString(Task task) {
         String mainEpic;
+        String startTime;
+        String duration;
+        String endTime;
         if (task.isSubtask()) {
             mainEpic = String.valueOf(getSubtask(task.getId()).getEpicId());
         } else {
             mainEpic = "";
         }
+        if (task.getStartTime() != null) {
+            startTime = task.getStartTime().format(task.getDateTimeFormatter());
+            duration = task.getDuration().toString();
+            endTime = task.getEndTime().format(task.getDateTimeFormatter());
+        } else {
+            startTime = "NULL";
+            duration = "NULL";
+            endTime = "NULL";
+        }
         return "\n" + task.getId() + "," + task.getTypeOfTask().toString() + "," +
                 task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," +
-                mainEpic + " ".trim();
+                duration + "," + startTime + "," + endTime + "," + mainEpic + " ".trim();
     }
 
     private static Task taskFromString(String value) {

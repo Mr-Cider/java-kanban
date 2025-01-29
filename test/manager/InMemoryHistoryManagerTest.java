@@ -20,6 +20,11 @@ class InMemoryHistoryManagerTest {
         taskManager = new InMemoryTaskManager(historyManager);
     }
 
+//    @Override
+//    InMemoryHistoryManager createTaskManager() {
+//        return new InMemoryHistoryManager();
+//    }
+
     @Test
     void shouldAddAndGetHistory() {
         Task task = new Task("1 таск", "Описание 1 таска", 1, "NEW");
