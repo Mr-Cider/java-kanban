@@ -32,7 +32,6 @@ public interface ITaskManager {
 
     int addNewSubtask(Subtask subtask);
 
-
     void updateTask(Task task);
 
     void updateEpic(Epic epic);
@@ -50,4 +49,6 @@ public interface ITaskManager {
     void deleteSubtasks();
 
     void deleteEpics();
+
+    List<Task> getAllTasks();
 }
