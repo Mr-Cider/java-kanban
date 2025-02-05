@@ -6,6 +6,7 @@ import alltasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public interface ITaskManager {
@@ -19,6 +20,7 @@ public interface ITaskManager {
     ArrayList<Epic> getEpics();
 
     ArrayList<Subtask> getEpicSubtasks(int epicId);
+
 
     Task getTask(int id);
 
@@ -51,4 +53,6 @@ public interface ITaskManager {
     void deleteEpics();
 
     List<Task> getAllTasks();
+
+    Set<Task> getPrioritizedTasks();
 }

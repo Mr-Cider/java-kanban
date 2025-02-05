@@ -139,6 +139,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             fileBackedTaskManager.newId = maxId;
             return fileBackedTaskManager;
         } catch (IOException e) {
+            System.out.println("Загрузка завершилась неудачей");
             throw new ManagerSaveException(e);
         }
     }

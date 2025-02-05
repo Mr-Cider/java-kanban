@@ -3,6 +3,8 @@ package manager;
 import alltasks.Epic;
 import alltasks.Subtask;
 import alltasks.Task;
+import exception.IntersectionException;
+import exception.NotFoundException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -67,18 +69,24 @@ public class InMemoryTaskManager implements ITaskManager {
 
     @Override
     public Task getTask(int id) {
+        Task task = tasks.get(id);
+        if (task == null) throw new NotFoundException("Задача с указанным id не найдена");
         historyManager.add(tasks.get(id));
-        return tasks.get(id);
+        return task;
     }
 
     @Override
     public Subtask getSubtask(int id) {
+        Subtask subtask = subtasks.get(id);
+        if (subtask == null) throw new NotFoundException("Сабтаск с указанным id не найден");
         historyManager.add(subtasks.get(id));
-        return subtasks.get(id);
+        return subtask;
     }
 
     @Override
     public Epic getEpic(int id) {
+    Epic epic = epics.get(id);
+        if (epic == null) throw new NotFoundException("Эпик с указанным id не найден");
         historyManager.add(epics.get(id));
         return epics.get(id);
     }
@@ -92,25 +100,21 @@ public class InMemoryTaskManager implements ITaskManager {
     }
 
     @Override
-    public int addNewTask(Task task) {
-        return Optional.of(task)
-                .filter(t -> t.getTypeOfTask() == TypeOfTask.TASK)
-                .flatMap(t ->
-                        Optional.ofNullable(t.getStartTime())
-                                .filter(startTime -> checkForIntersectingTasks(t))
-                                .map(startTime -> {
-                                    addOrUpdateSortedTask(t);
-                                    return t;
-                                })
-                                .or(() -> Optional.of(t))
-                )
-                .map(t -> {
-                    final int id = ++newId;
-                    t.setId(id);
-                    tasks.put(id, t);
-                    return id;
-                })
-                .orElse(-1);
+    public int addNewTask(Task task) throws IntersectionException {
+        if (task.getTypeOfTask() == TypeOfTask.TASK) {
+            if (task.getStartTime() != null) {
+                if (checkForIntersectingTasks(task)) {
+                    throw new IntersectionException("Задачи пересекаются во времени.");
+                }
+                addOrUpdateSortedTask(task);
+            }
+
+            final int id = ++newId;
+            task.setId(id);
+            tasks.put(id, task);
+            return id;
+        }
+        return -1;
     }
 
     @Override
@@ -125,24 +129,27 @@ public class InMemoryTaskManager implements ITaskManager {
     }
 
     @Override
-    public int addNewSubtask(Subtask subtask) {
-        return Optional.of(subtask).filter(s -> s.getTypeOfTask() == TypeOfTask.SUBTASK)
-                .flatMap(s -> Optional.ofNullable(getEpicNotHistory(s.getEpicId()))
-                        .map(epic -> {
-                            Optional.ofNullable(s.getStartTime())
-                                    .filter(startTime -> checkForIntersectingTasks(s))
-                                    .ifPresent(startTime -> {
-                                        addOrUpdateSortedTask(s);
-                                        setDateAndTimeInEpic(s.getEpicId());
-                                    });
-                            final int id = ++newId;
-                            s.setId(id);
-                            subtasks.put(id, s);
-                            epic.addSubtaskId(id);
-                            updateEpicStatus(epic);
-
-                            return id;
-                        })).orElse(-1);
+    public int addNewSubtask(Subtask subtask) throws IntersectionException {
+        if (subtask.getTypeOfTask() != TypeOfTask.SUBTASK) {
+            return -1;
+        }
+        Epic epic = getEpicNotHistory(subtask.getEpicId());
+        if (epic == null) {
+            return -1;
+        }
+        if (subtask.getStartTime() != null) {
+            if (checkForIntersectingTasks(subtask)) {
+                throw new IntersectionException("Задачи пересекаются во времени.");
+            }
+            addOrUpdateSortedTask(subtask);
+            setDateAndTimeInEpic(epic.getId());
+        }
+        final int id = ++newId;
+        subtask.setId(id);
+        subtasks.put(id, subtask);
+        epic.addSubtaskId(id);
+        updateEpicStatus(epic);
+        return id;
     }
 
     private void setDateAndTimeInEpic(int id) {
@@ -165,7 +172,7 @@ public class InMemoryTaskManager implements ITaskManager {
     public void updateTask(Task task) {
         if (task.getTypeOfTask().equals(TypeOfTask.TASK)) {
             if (!(tasks.containsKey(task.getId()))) {
-                return;
+                throw new NotFoundException("Таск с указанным id не найден");
             }
             tasks.put(task.getId(), task);
             if (task.getStartTime() != null) {
@@ -177,15 +184,17 @@ public class InMemoryTaskManager implements ITaskManager {
     @Override
     public void updateEpic(Epic epic) {
         if (!(epics.containsKey(epic.getId()))) {
-            return;
+            throw new NotFoundException("Эпик с указанным id не найден");
         }
         epics.put(epic.getId(), epic);
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-         Optional.of(subtask).filter(s -> subtasks.containsKey(subtask.getId()))
-                .ifPresent(s -> {
+        if (!(subtasks.containsKey(subtask.getId()))) {
+            throw new NotFoundException("Сабтаск с указанным id не найден");
+        }
+         Optional.of(subtask).ifPresent(s -> {
                     subtasks.put(s.getId(), s);
 Epic epic = getEpicNotHistory(subtask.getEpicId());
 Optional.ofNullable(s.getStartTime())
@@ -201,7 +210,7 @@ Optional.ofNullable(s.getStartTime())
     @Override
     public void deleteTask(int id) {
         if (!tasks.containsKey(id)) {
-            return;
+            throw new NotFoundException("Таск с указанным id не найден");
         }
         tasks.remove(id);
         sortedTasks.remove(tasks.get(id));
@@ -210,6 +219,9 @@ Optional.ofNullable(s.getStartTime())
 
     @Override
     public void deleteEpic(int id) {
+        if (!epics.containsKey(id)) {
+            throw new NotFoundException("Эпик с указанным id не найден");
+        }
         Optional.ofNullable(getEpicNotHistory(id)).ifPresent(epic -> {
             epic.getSubtaskIds().forEach(subtaskId -> {
                 sortedTasks.remove(subtasks.get(subtaskId));
@@ -224,7 +236,7 @@ Optional.ofNullable(s.getStartTime())
     @Override
     public void deleteSubtask(int id) {
         if (!(subtasks.containsKey(id))) {
-            return;
+            throw new NotFoundException("Таск с указанным id не найден");
         }
         Subtask subtask = getSubtask(id);
         Epic epic = getEpic(subtask.getEpicId());
@@ -252,7 +264,7 @@ Optional.ofNullable(s.getStartTime())
     public void deleteSubtasks() {
         epics.keySet().forEach(id -> {
             historyManager.remove(id);
-            Epic epic = getEpic(id);
+            Epic epic = epics.get(id);
             epic.getSubtaskIds().forEach(subtaskId -> sortedTasks.remove(new Subtask(getSubtask(subtaskId))));
             epic.cleanSubtaskIds();
             setDateAndTimeInEpic(epic.getId());
@@ -303,18 +315,23 @@ Optional.ofNullable(s.getStartTime())
     private boolean checkForIntersectingTasks(Task task) {
         LocalDateTime taskStart = task.getStartTime();
         LocalDateTime taskEnd = task.getEndTime();
-        return getPrioritizedTasks().stream().noneMatch(newTask -> {
+        return getPrioritizedTasks().stream().anyMatch(newTask -> {
             LocalDateTime newStartTask = newTask.getStartTime();
             LocalDateTime newEndTask = newTask.getEndTime();
             return taskEnd.isAfter(newStartTask) && taskStart.isBefore(newEndTask);
         });
     }
 
+    @Override
     public Set<Task> getPrioritizedTasks() {
-       return sortedTasks;
+       return new TreeSet<>(Task::compareToDate) {{
+           addAll(sortedTasks);
+       }};
     }
 
     private Epic getEpicNotHistory(int id) {
+        Epic epic = epics.get(id);
+        if (epic == null) throw new NotFoundException("Эпик с указанным id не найден");
         return epics.get(id);
     }
 }
