@@ -103,22 +103,21 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleUpdateEpic(HttpExchange exchange) throws IOException {
-            try {
-                String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
-                System.out.println("Received JSON: " + json);
-                Epic epic = gson.fromJson(json, Epic.class);
-                System.out.println("Parsed epic: " + epic);
-                manager.updateEpic(epic);
-                sendText(exchange, 201, gson.toJson(epic));
-            } catch (NotFoundException | IntersectionException e) {
-                handleException(exchange, e);
-            } catch (JsonSyntaxException e) {
-                sendError(exchange, 400, "Некорректный формат JSON");
-            } catch (Exception e) {
-                System.err.println("Error in handleUpdateTask: " + e.getMessage());
-            }
+        try {
+            String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
+            System.out.println("Received JSON: " + json);
+            Epic epic = gson.fromJson(json, Epic.class);
+            System.out.println("Parsed epic: " + epic);
+            manager.updateEpic(epic);
+            sendText(exchange, 201, gson.toJson(epic));
+        } catch (NotFoundException | IntersectionException e) {
+            handleException(exchange, e);
+        } catch (JsonSyntaxException e) {
+            sendError(exchange, 400, "Некорректный формат JSON");
+        } catch (Exception e) {
+            System.err.println("Error in handleUpdateTask: " + e.getMessage());
         }
-
+    }
 
     private void handleDeleteEpic(HttpExchange exchange, int id) throws IOException {
         try {
@@ -128,7 +127,7 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
         }
         sendText(exchange, 200, "Эпик с id " + id + "удален.");
     }
-    }
+}
 
 
 

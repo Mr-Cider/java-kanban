@@ -67,7 +67,6 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler{
                     sendText(exchange, 200, gson.toJson(tasks));
                 }
 
-
                 private void handleGetTaskById(HttpExchange exchange, int id) throws IOException {
                     Task task = manager.getTask(id);
                     sendText(exchange, 200, gson.toJson(task));
@@ -90,6 +89,7 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler{
                         System.err.println("Ошибка в handleAddNewTask: " + e.getMessage());
                     }
                 }
+
                 private void handleUpdateTask(HttpExchange exchange) throws IOException {
                     try {
                         String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
@@ -106,7 +106,6 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler{
                         System.err.println("Ошибка в handleUpdateTask: " + e.getMessage());
                     }
                 }
-
 
                 private void handleDeleteTask(HttpExchange exchange, int id) throws IOException {
                     try {
