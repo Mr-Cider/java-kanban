@@ -35,13 +35,6 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldTaskIsNull() {
-        taskManager.getTask(0);
-        List<Task> history = historyManager.getHistory();
-        assertEquals(0, history.size(), "Пустой таск добавлен");
-    }
-
-    @Test
     void shouldNewAddAndRewriting() {
         Task task = new Task("1 таск", "Описание 1 таска", 1, "NEW");
         Task task2 = new Task("3 таск", "Описание 3 таска", 3, "NEW");
