@@ -14,6 +14,7 @@ public class Epic extends Task {
         this.typeOfTask = TypeOfTask.EPIC;
         this.duration = Duration.ZERO;
     }
+
     public Epic(String name, String description) {
         super(name, description, "NEW");
         this.duration = Duration.ZERO;
