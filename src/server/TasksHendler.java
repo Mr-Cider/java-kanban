@@ -12,7 +12,8 @@ import manager.ITaskManager;
 import java.io.IOException;
 import java.util.List;
 
-public class TasksHendler extends BaseHttpHandler implements HttpHandler{
+public class TasksHendler extends BaseHttpHandler implements HttpHandler {
+
     public TasksHendler(ITaskManager manager, Gson gson) throws IOException {
         super(manager, gson);
     }
@@ -62,6 +63,7 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler{
             sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
         }
     }
+
                 private void handleGetTasks(HttpExchange exchange) throws IOException {
                     List<Task> tasks = manager.getTasks();
                     sendText(exchange, 200, gson.toJson(tasks));
