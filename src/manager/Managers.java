@@ -8,7 +8,7 @@ public class Managers {
         return new InMemoryTaskManager(getDefaultHistory());
     }
 
-    public static ITaskManager getFileBackedTaskManager () throws IOException {
+    public static ITaskManager getFileBackedTaskManager() throws IOException {
         return new FileBackedTaskManager(getDefaultHistory());
     }
 
