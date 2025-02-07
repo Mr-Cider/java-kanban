@@ -24,7 +24,6 @@ public class HttpTaskServer {
             .create();;
     public final ITaskManager manager;
 
-
     public HttpTaskServer() throws IOException {
         this.manager = Managers.getDefault();
     }
