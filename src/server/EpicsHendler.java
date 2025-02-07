@@ -27,7 +27,7 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
                 String idS = searchId(path);
                 if (idS != null) id = Integer.parseInt(idS);
             } catch (NotFoundException e) {
-                sendText(exchange, 400, "Некорректный id");
+                sendText(exchange, BAD_REQUEST, "Некорректный id");
                 return;
             }
 
@@ -62,26 +62,26 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
                     System.out.println("Удалить эпик");
                     break;
                 default:
-                    sendError(exchange, 404, "Эндпоинт не найден");
+                    sendError(exchange, NOT_FOUND, "Эндпоинт не найден");
             }
         } catch (Exception e) {
-            sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
+            sendError(exchange, INTERNAL_SERVER_ERROR, "Ошибка сервера" + e.getMessage());
         }
     }
 
     private void handleGetEpics(HttpExchange exchange) throws IOException {
         List<Epic> epics = manager.getEpics();
-        sendText(exchange, 200, gson.toJson(epics));
+        sendText(exchange, OK, gson.toJson(epics));
     }
 
     private void handleGetEpicById(HttpExchange exchange, int id) throws IOException {
         Epic epic = manager.getEpic(id);
-        sendText(exchange, 200, gson.toJson(epic));
+        sendText(exchange, OK, gson.toJson(epic));
     }
 
     private void handleGetEpicSubtasks(HttpExchange exchange, int id) throws IOException {
         List<Subtask> subtasks = manager.getEpicSubtasks(id);
-        sendText(exchange, 200, gson.toJson(subtasks));
+        sendText(exchange, OK, gson.toJson(subtasks));
     }
 
     private void handleAddNewEpic(HttpExchange exchange) throws IOException {
@@ -92,11 +92,11 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
             System.out.println("Парсим эпик: " + epic);
             int taskId = manager.addNewEpic(epic);
             System.out.println("ID: " + taskId);
-            sendText(exchange, 201, gson.toJson(epic));
+            sendText(exchange, CREATED, gson.toJson(epic));
         } catch (NotFoundException | IntersectionException e) {
             handleException(exchange, e);
         } catch (JsonSyntaxException e) {
-            sendError(exchange, 400, "Некорректный формат JSON");
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
         } catch (Exception e) {
             System.err.println("Ошибка в handleAddNewEpic: " + e.getMessage());
         }
@@ -109,11 +109,11 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
             Epic epic = gson.fromJson(json, Epic.class);
             System.out.println("Parsed epic: " + epic);
             manager.updateEpic(epic);
-            sendText(exchange, 201, gson.toJson(epic));
+            sendText(exchange, CREATED, gson.toJson(epic));
         } catch (NotFoundException | IntersectionException e) {
             handleException(exchange, e);
         } catch (JsonSyntaxException e) {
-            sendError(exchange, 400, "Некорректный формат JSON");
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
         } catch (Exception e) {
             System.err.println("Error in handleUpdateTask: " + e.getMessage());
         }
@@ -125,7 +125,7 @@ public class EpicsHendler extends BaseHttpHandler implements HttpHandler {
         } catch (NotFoundException e) {
             handleException(exchange, e);
         }
-        sendText(exchange, 200, "Эпик с id " + id + "удален.");
+        sendText(exchange, OK, "Эпик с id " + id + "удален.");
     }
 }
 

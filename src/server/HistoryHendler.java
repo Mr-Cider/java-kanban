@@ -25,15 +25,15 @@ public class HistoryHendler extends BaseHttpHandler implements HttpHandler {
                     break;
 
                 default:
-                    sendError(exchange, 404, "Эндпоинт не найден");
+                    sendError(exchange, NOT_FOUND, "Эндпоинт не найден");
             }
         } catch (Exception e) {
-            sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
+            sendError(exchange, INTERNAL_SERVER_ERROR, "Ошибка сервера" + e.getMessage());
         }
     }
 
     private void handleGetHistory(HttpExchange exchange) throws IOException {
         List<Task> history = manager.getHistory();
-        sendText(exchange, 200, gson.toJson(history));
+        sendText(exchange, OK, gson.toJson(history));
     }
 }

@@ -16,17 +16,16 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    public final Gson gson;
+    public static final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Epic.class, new EpicSerializer())
+            .registerTypeAdapter(Duration.class, new DurationAdapter()) // Регистрируем адаптер
+            .registerTypeAdapter(LocalDateTime.class, new LocalDataTimeAdapter())
+            .registerTypeAdapter(Task.class, new TaskAdapter())
+            .create();;
     public final ITaskManager manager;
 
 
     public HttpTaskServer() throws IOException {
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(Epic.class, new EpicSerializer())
-                .registerTypeAdapter(Duration.class, new DurationAdapter()) // Регистрируем адаптер
-                .registerTypeAdapter(LocalDateTime.class, new LocalDataTimeAdapter())
-                .registerTypeAdapter(Task.class, new TaskAdapter())
-                .create();
         this.manager = Managers.getDefault();
     }
 
@@ -38,11 +37,11 @@ public class HttpTaskServer {
     public void start(HttpTaskServer taskServer) throws IOException {
         ITaskManager manager = Managers.getFileBackedTaskManager();
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
-        httpServer.createContext("/tasks", new TasksHendler(manager, taskServer.gson));
-        httpServer.createContext("/epics", new EpicsHendler(manager, taskServer.gson));
-        httpServer.createContext("/subtasks", new SubtasksHendler(manager, taskServer.gson));
-        httpServer.createContext("/history", new HistoryHendler(manager, taskServer.gson));
-        httpServer.createContext("/prioritized", new PrioritizedHendler(manager, taskServer.gson));
+        httpServer.createContext("/tasks", new TasksHendler(manager, gson));
+        httpServer.createContext("/epics", new EpicsHendler(manager, gson));
+        httpServer.createContext("/subtasks", new SubtasksHendler(manager, gson));
+        httpServer.createContext("/history", new HistoryHendler(manager, gson));
+        httpServer.createContext("/prioritized", new PrioritizedHendler(manager, gson));
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }

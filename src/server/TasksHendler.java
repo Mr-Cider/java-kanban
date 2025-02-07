@@ -19,7 +19,7 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler {
     }
 
     @Override
-        public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) throws IOException {
         try {
             String path = exchange.getRequestURI().getPath();
             int id = 0;
@@ -27,7 +27,7 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler {
                 String idS = searchId(path);
                 if (idS != null) id = Integer.parseInt(idS);
             } catch (NotFoundException e) {
-                sendText(exchange, 400, "Некорректный id");
+                sendText(exchange, BAD_REQUEST, "Некорректный id");
                 return;
             }
 
@@ -57,64 +57,64 @@ public class TasksHendler extends BaseHttpHandler implements HttpHandler {
                     System.out.println("Удалить задачу");
                     break;
                 default:
-                    sendError(exchange, 404, "Эндпоинт не найден");
+                    sendError(exchange, NOT_FOUND, "Эндпоинт не найден");
             }
         } catch (Exception e) {
-            sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
+            sendError(exchange, INTERNAL_SERVER_ERROR, "Ошибка сервера" + e.getMessage());
         }
     }
 
-                private void handleGetTasks(HttpExchange exchange) throws IOException {
-                    List<Task> tasks = manager.getTasks();
-                    sendText(exchange, 200, gson.toJson(tasks));
-                }
-
-                private void handleGetTaskById(HttpExchange exchange, int id) throws IOException {
-                    Task task = manager.getTask(id);
-                    sendText(exchange, 200, gson.toJson(task));
-                }
-
-                private void handleAddNewTask(HttpExchange exchange) throws IOException {
-                    try {
-                        String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
-                        System.out.println("JSON: " + json);
-                        Task task = gson.fromJson(json, Task.class);
-                        System.out.println("Парсим task: " + task);
-                        int taskId = manager.addNewTask(task);
-                        System.out.println("ID: " + taskId);
-                        sendText(exchange, 201, gson.toJson(task));
-                    } catch (NotFoundException | IntersectionException e) {
-                        handleException(exchange, e);
-                    } catch (JsonSyntaxException e) {
-                        sendError(exchange, 400, "Некорректный формат JSON");
-                    } catch (Exception e) {
-                        System.err.println("Ошибка в handleAddNewTask: " + e.getMessage());
-                    }
-                }
-
-                private void handleUpdateTask(HttpExchange exchange) throws IOException {
-                    try {
-                        String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
-                        System.out.println("JSON: " + json);
-                        Task task = gson.fromJson(json, Task.class);
-                        System.out.println("Парсим task: " + task);
-                        manager.updateTask(task);
-                        sendText(exchange, 201, gson.toJson(task));
-                    } catch (NotFoundException | IntersectionException e) {
-                        handleException(exchange, e);
-                    } catch (JsonSyntaxException e) {
-                        sendError(exchange, 400, "Некорректный формат JSON");
-                    } catch (Exception e) {
-                        System.err.println("Ошибка в handleUpdateTask: " + e.getMessage());
-                    }
-                }
-
-                private void handleDeleteTask(HttpExchange exchange, int id) throws IOException {
-                    try {
-                        manager.deleteTask(id);
-                    } catch (NotFoundException e) {
-                        handleException(exchange, e);
-                    }
-                    sendText(exchange, 200, "Задача с id " + id + "удалена.");
-                }
+    private void handleGetTasks(HttpExchange exchange) throws IOException {
+        List<Task> tasks = manager.getTasks();
+        sendText(exchange, OK, gson.toJson(tasks));
     }
+
+    private void handleGetTaskById(HttpExchange exchange, int id) throws IOException {
+        Task task = manager.getTask(id);
+        sendText(exchange, OK, gson.toJson(task));
+    }
+
+    private void handleAddNewTask(HttpExchange exchange) throws IOException {
+        try {
+            String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
+            System.out.println("JSON: " + json);
+            Task task = gson.fromJson(json, Task.class);
+            System.out.println("Парсим task: " + task);
+            int taskId = manager.addNewTask(task);
+            System.out.println("ID: " + taskId);
+            sendText(exchange, CREATED, gson.toJson(task));
+        } catch (NotFoundException | IntersectionException e) {
+            handleException(exchange, e);
+        } catch (JsonSyntaxException e) {
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
+        } catch (Exception e) {
+            System.err.println("Ошибка в handleAddNewTask: " + e.getMessage());
+        }
+    }
+
+    private void handleUpdateTask(HttpExchange exchange) throws IOException {
+        try {
+            String json = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
+            System.out.println("JSON: " + json);
+            Task task = gson.fromJson(json, Task.class);
+            System.out.println("Парсим task: " + task);
+            manager.updateTask(task);
+            sendText(exchange, CREATED, gson.toJson(task));
+        } catch (NotFoundException | IntersectionException e) {
+            handleException(exchange, e);
+        } catch (JsonSyntaxException e) {
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
+        } catch (Exception e) {
+            System.err.println("Ошибка в handleUpdateTask: " + e.getMessage());
+        }
+    }
+
+    private void handleDeleteTask(HttpExchange exchange, int id) throws IOException {
+        try {
+            manager.deleteTask(id);
+        } catch (NotFoundException e) {
+            handleException(exchange, e);
+        }
+        sendText(exchange, OK, "Задача с id " + id + "удалена.");
+    }
+}

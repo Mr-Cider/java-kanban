@@ -13,7 +13,7 @@ public class DurationAdapter extends TypeAdapter<Duration> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(value.toMinutes()); // Сериализуем в минутах
+            out.value(value.toMinutes());
         }
     }
 

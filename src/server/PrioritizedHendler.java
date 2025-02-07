@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Set;
 
 public class PrioritizedHendler extends BaseHttpHandler implements HttpHandler {
+
     public PrioritizedHendler(ITaskManager manager, Gson gson) throws IOException {
         super(manager, gson);
     }
@@ -25,16 +26,16 @@ public class PrioritizedHendler extends BaseHttpHandler implements HttpHandler {
                     break;
 
                 default:
-                    sendError(exchange, 404, "Эндпоинт не найден");
+                    sendError(exchange, NOT_FOUND, "Эндпоинт не найден");
             }
         } catch (Exception e) {
-            sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
+            sendError(exchange, INTERNAL_SERVER_ERROR, "Ошибка сервера" + e.getMessage());
         }
     }
 
     private void handleGetPrioritized(HttpExchange exchange) throws IOException {
         Set<Task> prioritized = manager.getPrioritizedTasks();
-        sendText(exchange, 200, gson.toJson(prioritized));
+        sendText(exchange, OK, gson.toJson(prioritized));
     }
 }
 

@@ -16,6 +16,12 @@ public class BaseHttpHandler {
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected final ITaskManager manager;
     protected final Gson gson;
+    protected static final int OK = 200;
+    protected static final int CREATED = 201;
+    protected static final int BAD_REQUEST = 400;
+    protected static final int NOT_FOUND = 404;
+    protected static final int NOT_ACCEPTABLE = 406;
+    protected static final int INTERNAL_SERVER_ERROR = 500;
 
     public BaseHttpHandler(ITaskManager manager, Gson gson) throws IOException {
         this.manager = manager;
@@ -41,10 +47,10 @@ public class BaseHttpHandler {
 
     protected void handleException(HttpExchange exchange, Exception e) throws IOException {
         if (e instanceof NotFoundException) {
-            sendError(exchange, 404, e.getMessage());
+            sendError(exchange, NOT_FOUND, e.getMessage());
         }
         if (e instanceof IntersectionException) {
-            sendError(exchange, 406, e.getMessage());
+            sendError(exchange, NOT_ACCEPTABLE, e.getMessage());
         }
     }
 

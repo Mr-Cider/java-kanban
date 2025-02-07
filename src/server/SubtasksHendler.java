@@ -26,7 +26,7 @@ public class SubtasksHendler extends BaseHttpHandler implements HttpHandler {
                 String idS = searchId(path);
                 if (idS != null) id = Integer.parseInt(idS);
             } catch (NotFoundException e) {
-                sendText(exchange, 400, "Некорректный id");
+                sendText(exchange, BAD_REQUEST, "Некорректный id");
                 return;
             }
 
@@ -56,21 +56,21 @@ public class SubtasksHendler extends BaseHttpHandler implements HttpHandler {
                     System.out.println("Удалить сабтаск");
                     break;
                 default:
-                    sendError(exchange, 404, "Эндпоинт не найден");
+                    sendError(exchange, NOT_FOUND, "Эндпоинт не найден");
             }
         } catch (Exception e) {
-            sendError(exchange, 500, "Ошибка сервера" + e.getMessage());
+            sendError(exchange, INTERNAL_SERVER_ERROR, "Ошибка сервера" + e.getMessage());
         }
     }
 
     private void handleGetSubtasks(HttpExchange exchange) throws IOException {
         List<Subtask> subtasks = manager.getSubtasks();
-        sendText(exchange, 200, gson.toJson(subtasks));
+        sendText(exchange, OK, gson.toJson(subtasks));
     }
 
     private void handleGetSubtaskById(HttpExchange exchange, int id) throws IOException {
         Subtask subtask = manager.getSubtask(id);
-        sendText(exchange, 200, gson.toJson(subtask));
+        sendText(exchange, OK, gson.toJson(subtask));
     }
 
     private void handleAddNewSubtask(HttpExchange exchange) throws IOException {
@@ -81,11 +81,11 @@ public class SubtasksHendler extends BaseHttpHandler implements HttpHandler {
             System.out.println("Парсим сабтаск: " + subtask);
             int taskId = manager.addNewSubtask(subtask);
             System.out.println("ID: " + taskId);
-            sendText(exchange, 201, gson.toJson(subtask));
+            sendText(exchange, CREATED, gson.toJson(subtask));
         } catch (NotFoundException | IntersectionException e) {
             handleException(exchange, e);
         } catch (JsonSyntaxException e) {
-            sendError(exchange, 400, "Некорректный формат JSON");
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
         } catch (Exception e) {
             System.err.println("Ошибка handleAddNewSubtask: " + e.getMessage());
         }
@@ -98,13 +98,13 @@ public class SubtasksHendler extends BaseHttpHandler implements HttpHandler {
             Subtask subtask = gson.fromJson(json, Subtask.class);
             System.out.println("Парсим сабтаск: " + subtask);
             manager.updateSubtask(subtask);
-            sendText(exchange, 201, gson.toJson(subtask));
+            sendText(exchange, CREATED, gson.toJson(subtask));
         } catch (NotFoundException | IntersectionException e) {
             handleException(exchange, e);
         } catch (JsonSyntaxException e) {
-            sendError(exchange, 400, "Некорректный формат JSON");
+            sendError(exchange, BAD_REQUEST, "Некорректный формат JSON");
         } catch (Exception e) {
-            System.err.println("Ошибка в handleUpdateSubtask: " + e.getMessage());
+//            System.err.println("Ошибка в handleUpdateSubtask: " + e.getMessage());
         }
     }
 
@@ -114,7 +114,7 @@ public class SubtasksHendler extends BaseHttpHandler implements HttpHandler {
         } catch (NotFoundException e) {
             handleException(exchange, e);
         }
-        sendText(exchange, 200, "Сабтаск с id " + id + "удален.");
+        sendText(exchange, OK, "Сабтаск с id " + id + "удален.");
     }
     }
 
