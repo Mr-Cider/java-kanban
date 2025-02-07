@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
+    public final ITaskManager manager;
     public static final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Epic.class, new EpicSerializer())
+            .registerTypeAdapter(Epic.class, new EpicSerializer())
             .registerTypeAdapter(Duration.class, new DurationAdapter()) // Регистрируем адаптер
             .registerTypeAdapter(LocalDateTime.class, new LocalDataTimeAdapter())
             .registerTypeAdapter(Task.class, new TaskAdapter())
-            .create();;
-    public final ITaskManager manager;
+            .create();
 
     public HttpTaskServer() throws IOException {
         this.manager = Managers.getDefault();
