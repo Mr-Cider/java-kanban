@@ -1,5 +1,6 @@
 package alltasks;
 
+import com.google.gson.annotations.SerializedName;
 import manager.TaskStatus;
 import manager.TypeOfTask;
 
@@ -9,16 +10,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
+    @SerializedName("name")
     protected String name;
+
+    @SerializedName("description")
     protected String description;
+
+    @SerializedName("id")
     protected int id;
+
+    @SerializedName("status")
     protected TaskStatus status;
+
+    @SerializedName("typeOfTask")
     protected TypeOfTask typeOfTask;
-    protected Duration duration;  //продолжительность задачи
+
+    @SerializedName("duration")
+    protected Duration duration;
+
+    @SerializedName("startTime")
     protected LocalDateTime startTime; //начало выполнения
+
+    @SerializedName("endTime")
     protected LocalDateTime endTime;
 
     protected static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+    public Task() {
+        this.typeOfTask = TypeOfTask.TASK;
+        this.duration = Duration.ZERO;
+    }
 
     public Task(String name, String description, int id, String status) {
         this.name = name;
@@ -142,7 +163,14 @@ public class Task {
     }
 
     public static int compareToDate(Task task1, Task task2) {
-        return task1.startTime.compareTo(task2.startTime);
+        if (task1.getStartTime() == null && task2.getStartTime() == null) return 0;
+        if (task1.getStartTime() == null) return 1; // Задачи без времени в конец
+        if (task2.getStartTime() == null) return -1;
+        return task1.getStartTime().compareTo(task2.getStartTime());
+    }
+
+    public static DateTimeFormatter getDataTimeFormatter() {
+        return DATE_TIME_FORMATTER;
     }
 
     @Override

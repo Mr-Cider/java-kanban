@@ -5,10 +5,15 @@ import manager.TypeOfTask;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtaskIds = new ArrayList<>();
-    private LocalDateTime endTime;
+    private List<Integer> subtaskIds = new ArrayList<>();
+
+    public Epic() {
+        this.typeOfTask = TypeOfTask.EPIC;
+        this.duration = Duration.ZERO;
+    }
 
     public Epic(String name, String description) {
         super(name, description, "NEW");
@@ -53,17 +58,12 @@ public class Epic extends Task {
         return true;
     }
 
-    @Override
-    public boolean isSubtask() {
-        return false;
-    }
-
     public void addSubtaskId(int id) {
         subtaskIds.add(id);
     }
 
     public ArrayList<Integer> getSubtaskIds() {
-        return subtaskIds;
+        return new ArrayList<>(subtaskIds);
     }
 
     public void cleanSubtaskIds() {

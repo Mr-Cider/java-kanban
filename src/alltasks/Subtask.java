@@ -1,11 +1,14 @@
 package alltasks;
 
+import com.google.gson.annotations.SerializedName;
 import manager.TypeOfTask;
 
 import java.time.Duration;
 import java.util.Objects;
 
 public class Subtask extends Task {
+    @SerializedName("typeOfTask")
+    protected TypeOfTask typeOfTask = TypeOfTask.SUBTASK;
     private int epicId;
 
     public Subtask(String name, String description, int id, String status, int epicId) {
@@ -41,13 +44,13 @@ public class Subtask extends Task {
         this.epicId = copy.epicId;
     }
 
-    public int getEpicId() {
-        return epicId;
+    @Override
+    public TypeOfTask getTypeOfTask() {
+        return typeOfTask;
     }
 
-    @Override
-    public boolean isEpic() {
-        return false;
+    public int getEpicId() {
+        return epicId;
     }
 
     @Override
